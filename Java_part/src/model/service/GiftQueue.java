@@ -36,7 +36,6 @@ public class GiftQueue {
         for (Map.Entry<Integer, Integer> item :
                 idAndChance.entrySet()) {
             if (rndNumber <= item.getValue()) {
-                Toy choice = new Toy();
                 for (Toy toy :
                         toys) {
                     if (item.getKey() == toy.getToyID()) {
