@@ -37,4 +37,14 @@ public class WriteReaderCSVImpl implements WriterReader {
             throw new RuntimeException(e);
         }
     }
+
+    public void writeCSV(String path, String data) {
+        File file = new File(path);
+
+        try (PrintWriter printWriter = new PrintWriter(new FileWriter(file, true))) {
+            printWriter.write(data);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
