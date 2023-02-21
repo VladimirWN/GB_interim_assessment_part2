@@ -27,11 +27,14 @@ public class Controller {
 
         Toy tempToy = new Toy();
         while (true) {
-            view.set("1 - список игрушек в стоке\n" +
-                    "2 - добавить игрушку в сток\n" +
-                    "3 - розыгрышь (добавить игрушку в очередь на выдачу)\n" +
-                    "4 - выдать приз из очереди\n" +
-                    "0 - завершить работу\n");
+            view.set("""
+                    1 - список игрушек в стоке
+                    2 - добавить игрушку в сток
+                    3 - изменить шанс выпадения
+                    4 - розыгрышь (добавить игрушку в очередь на выдачу)
+                    5 - выдать приз из очереди
+                    0 - завершить работу
+                    """);
             String key = view.get();
             switch (key) {
                 case "1":
@@ -46,6 +49,16 @@ public class Controller {
                     }
                     break;
                 case "3":
+                    int tempInt = chooseID(toyService.getActualToys());
+                    if (tempInt == 0){
+                        break;
+                    }
+                    String tempStr = changeChance();
+                    if (tempStr != null){
+                        toyService.changeChance(tempInt, tempStr);
+                        break;
+                    }
+                case "4":
                     if (toyService.getActualToys().size() == 0) {
                         view.set("В стоке нет игрушек.");
                         break;
@@ -54,7 +67,7 @@ public class Controller {
                     toyService.decreaseQuantityToy(tempToy.getToyID());
                     view.set("В список призов добавлено: " + tempToy);
                     break;
-                case "4":
+                case "5":
                     if (giftQueue.getCurrentQueue().isEmpty()) {
                         view.set("Очередь подарков пуста.");
                         break;
@@ -125,5 +138,41 @@ public class Controller {
         String result = String.valueOf(Toy.getNumberOfID() + 1) + ";"
                 + name + ";" + quantity + ";" + chance;
         return result.split(";");
+    }
+
+    public int chooseID(List<Toy> toysList){
+        view.set("Введите ID зменяемой игрушки: ");
+        String id = view.get();
+        int idInd = 0;
+        try {
+            idInd = Integer.parseInt(id);
+        } catch (Exception e) {
+            view.set("Должно быть введено только целое число!");
+            return 0;
+        }
+        if (idInd <= 0) {
+            view.set("ID может быть только больше 0!");
+            return 0;
+        } else if (idInd > toysList.size()) {
+            view.set("Такого ID нет!");
+            return 0;
+        }
+        return idInd;
+    }
+    public String changeChance(){
+        view.set("Введите шанс выпадения в формате 0.%% ");
+        String chance = view.get();
+        float chanceFloat = 0.0f;
+        try {
+            chanceFloat = Float.parseFloat(chance);
+        } catch (Exception e) {
+            view.set("Неверный формат числа!");
+            return null;
+        }
+        if ((int) chanceFloat > 0 || chanceFloat == 0) {
+            view.set("Шанс выпадения должен быть меньше 1 и больше 0!");
+            return null;
+        }
+        return chance;
     }
 }

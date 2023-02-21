@@ -70,6 +70,18 @@ public class ToyService {
         return false;
     }
 
+    public void changeChance(int id, String param) {
+        for (Toy toy :
+                this.actualToys) {
+            if (id == toy.getToyID()) {
+                toy.setDropChance(Float.parseFloat(param));
+                WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
+                wr.updateDB(this.config, this.actualToys);
+                return;
+            }
+        }
+    }
+
     public void decreaseQuantityToy(int id) {
         for (Toy item :
                 this.actualToys) {
