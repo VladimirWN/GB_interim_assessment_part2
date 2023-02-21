@@ -49,7 +49,9 @@ public class ToyService {
     public Toy newToy(String[] param){
         Toy toy = createToyFromDB(param);
         this.actualToys.add(toy);
-
+        if (Toy.getNumberOfID() < toy.getToyID()) {
+            Toy.setNumberOfID(toy.getToyID());
+        }
         WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
         wr.updateDB(this.config, actualToys);
         return toy;

@@ -4,25 +4,26 @@ import config.Config;
 import model.data.Toy;
 import model.service.GiftQueue;
 import model.service.ToyService;
+import util.WriteReaderCSVImpl;
 import view.ConsoleViewImpl;
 import view.View;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class controller {
+public class Controller {
 
     View view;
 
-    public controller() {
+    public Controller() {
         this.view = new ConsoleViewImpl();
     }
 
     public void start(){
         ToyService toyService = new ToyService(Config.stockPath);
         GiftQueue giftQueue = new GiftQueue();
-        ToyService prizeList = new ToyService(Config.prizePath);
+        List<String> prizeList = new ArrayList<>();
+        WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
 
         Toy tempToy = new Toy();
         while (true){
@@ -45,9 +46,13 @@ public class controller {
                     }
                     break;
                 case "3":
+                    if (toyService.getActualToys().size() == 0){
+                        view.set("В стоке нет игрушек.");
+                        break;
+                    }
                     tempToy = giftQueue.fillingQueue(toyService.getActualToys());
                     toyService.decreaseQuantityToy(tempToy.getToyID());
-                    view.set("В список призов доабвлено: " + tempToy);
+                    view.set("В список призов добавлено: " + tempToy);
                     break;
                 case "4":
                     if (giftQueue.getCurrentQueue().isEmpty()){
@@ -56,7 +61,7 @@ public class controller {
                     }
                     tempToy = giftQueue.getPrize();
                     view.set("Выдана игрушка: " + tempToy);
-                    prizeList.addToyToList(tempToy);
+                    wr.writeCSV(Config.prizePath, String.format("id:%d Name: %s", tempToy.getToyID(), tempToy.getName()));
                     break;
                 case "0":
                     view.set("Работа приложения завершена!");
@@ -70,10 +75,13 @@ public class controller {
     }
 
     public void printAllList(List<Toy> toys){
+        List<String> toPrint = new ArrayList<>();
         for (Toy toy :
                 toys) {
-            view.set(toy.toString());
+            toPrint.add(toy.toString());
+            toPrint.add("\n");
         }
+        view.set(toPrint.toString());
     }
 
 
@@ -108,8 +116,8 @@ public class controller {
             view.set("Неверный формат числа!");
             return null;
         }
-        if ((int)chanceFloat > 0){
-            view.set("Шанс выпадения должен быть меньше 0!");
+        if ((int)chanceFloat > 0 || chanceFloat == 0){
+            view.set("Шанс выпадения должен быть меньше 1 и больше 0!");
             return null;
         }
 

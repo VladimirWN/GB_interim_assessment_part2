@@ -22,7 +22,7 @@ public class GiftQueue {
         Map<Integer, Integer> idAndChance = new HashMap<>();
         for (Toy item :
                 toys) {
-            idAndChance.put(item.getToyID(), (int) item.getDropChance() * 100);
+            idAndChance.put(item.getToyID(), (int) (item.getDropChance() * 100));
         }
 
         int currentPoint = 0;
