@@ -61,7 +61,8 @@ public class Controller {
                     }
                     tempToy = giftQueue.getPrize();
                     view.set("Выдана игрушка: " + tempToy);
-                    wr.writeCSV(Config.prizePath, String.format("id:%d Name: %s", tempToy.getToyID(), tempToy.getName()));
+                    wr.writeCSV(Config.prizePath, String.format("id:%d Name: %s\n",
+                            tempToy.getToyID(), tempToy.getName()));
                     break;
                 case "0":
                     view.set("Работа приложения завершена!");
