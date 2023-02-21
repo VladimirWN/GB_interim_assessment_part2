@@ -18,6 +18,16 @@ public class Toy {
     public Toy() {
     }
 
+    @Override
+    public String toString() {
+        return "Toy{" +
+                "ID= " + toyID +
+                ", Название= " + name + '\'' +
+                ", Оставшееся количество= " + quantity +
+                ", Шанс выпадения= " + dropChance +
+                '}';
+    }
+
     public static int newID() {
         return ++numberOfID;
     }
