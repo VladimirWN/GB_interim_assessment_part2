@@ -2,5 +2,6 @@ package config;
 
 public class Config {
 
-    public static String path = "toy.csv";
+    public static String stockPath = "toys.csv";
+    public static String prizePath = "prize.csv";
 }

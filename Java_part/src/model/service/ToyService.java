@@ -1,6 +1,5 @@
 package model.service;
 
-import config.Config;
 import model.data.Toy;
 import util.WriteReaderCSVImpl;
 
@@ -10,15 +9,23 @@ import java.util.List;
 public class ToyService {
 
     private List<Toy> actualToys;
+    private String config;
 
     public List<Toy> getActualToys() {
         return actualToys;
     }
 
-    public ToyService() {
-        this.actualToys = new ArrayList<>();
+    public void addToyToList(Toy toy){
+        this.actualToys.add(toy);
         WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
-        String[] temp = wr.read(Config.path).split("\n");
+        wr.updateDB(this.config, actualToys);
+    }
+
+    public ToyService(String config) {
+        this.actualToys = new ArrayList<>();
+        this.config = config;
+        WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
+        String[] temp = wr.read(this.config).split("\n");
 
         if (temp.length > 1){
             for (String item :
@@ -39,12 +46,13 @@ public class ToyService {
                 Float.parseFloat(param[3]));
     }
 
-    public void newToy(String[] param){
+    public Toy newToy(String[] param){
         Toy toy = createToyFromDB(param);
         this.actualToys.add(toy);
 
         WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
-        wr.updateDB(Config.path, actualToys);
+        wr.updateDB(this.config, actualToys);
+        return toy;
     }
 
     public boolean removeToy(int id) {
@@ -53,7 +61,7 @@ public class ToyService {
             if (item.getToyID() == id) {
                 this.actualToys.remove(item);
                 WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
-                wr.updateDB(Config.path, this.actualToys);
+                wr.updateDB(this.config, this.actualToys);
                 return true;
             }
         }
@@ -70,7 +78,7 @@ public class ToyService {
                     return;
                 }
                 WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
-                wr.updateDB(Config.path, this.actualToys);
+                wr.updateDB(this.config, this.actualToys);
                 return;
             }
         }
