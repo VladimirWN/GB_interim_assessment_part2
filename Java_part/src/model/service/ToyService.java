@@ -11,6 +11,10 @@ public class ToyService {
 
     private List<Toy> actualToys;
 
+    public List<Toy> getActualToys() {
+        return actualToys;
+    }
+
     public ToyService() {
         this.actualToys = new ArrayList<>();
         WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
@@ -41,6 +45,35 @@ public class ToyService {
 
         WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
         wr.updateDB(Config.path, actualToys);
+    }
+
+    public boolean removeToy(int id) {
+        for (Toy item :
+                this.actualToys) {
+            if (item.getToyID() == id) {
+                this.actualToys.remove(item);
+                WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
+                wr.updateDB(Config.path, this.actualToys);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void decreaseQuantityToy(int id) {
+        for (Toy item :
+                this.actualToys) {
+            if (item.getToyID() == id) {
+                item.setQuantity(item.getQuantity() - 1);
+                if (item.getQuantity() == 0){
+                    removeToy(item.getToyID());
+                    return;
+                }
+                WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
+                wr.updateDB(Config.path, this.actualToys);
+                return;
+            }
+        }
     }
 
 }
