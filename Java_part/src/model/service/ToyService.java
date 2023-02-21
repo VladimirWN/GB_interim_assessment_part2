@@ -15,7 +15,7 @@ public class ToyService {
         return actualToys;
     }
 
-    public void addToyToList(Toy toy){
+    public void addToyToList(Toy toy) {
         this.actualToys.add(toy);
         WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
         wr.updateDB(this.config, actualToys);
@@ -27,7 +27,7 @@ public class ToyService {
         WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
         String[] temp = wr.read(this.config).split("\n");
 
-        if (temp.length > 1){
+        if (temp.length > 1) {
             for (String item :
                     temp) {
                 Toy toy = createToyFromDB(item.split(";"));
@@ -39,14 +39,14 @@ public class ToyService {
         }
     }
 
-    public Toy createToyFromDB(String[] param){
+    public Toy createToyFromDB(String[] param) {
         return new Toy(Integer.parseInt(param[0]),
                 param[1],
                 Integer.parseInt(param[2]),
                 Float.parseFloat(param[3]));
     }
 
-    public Toy newToy(String[] param){
+    public Toy newToy(String[] param) {
         Toy toy = createToyFromDB(param);
         this.actualToys.add(toy);
         if (Toy.getNumberOfID() < toy.getToyID()) {
@@ -75,7 +75,7 @@ public class ToyService {
                 this.actualToys) {
             if (item.getToyID() == id) {
                 item.setQuantity(item.getQuantity() - 1);
-                if (item.getQuantity() == 0){
+                if (item.getQuantity() == 0) {
                     removeToy(item.getToyID());
                     return;
                 }

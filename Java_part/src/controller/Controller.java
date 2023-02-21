@@ -19,14 +19,14 @@ public class Controller {
         this.view = new ConsoleViewImpl();
     }
 
-    public void start(){
+    public void start() {
         ToyService toyService = new ToyService(Config.stockPath);
         GiftQueue giftQueue = new GiftQueue();
         List<String> prizeList = new ArrayList<>();
         WriteReaderCSVImpl wr = new WriteReaderCSVImpl();
 
         Toy tempToy = new Toy();
-        while (true){
+        while (true) {
             view.set("1 - список игрушек в стоке\n" +
                     "2 - добавить игрушку в сток\n" +
                     "3 - розыгрышь (добавить игрушку в очередь на выдачу)\n" +
@@ -40,13 +40,13 @@ public class Controller {
                     break;
                 case "2":
                     String[] newParam = newToy();
-                    if (newParam != null){
+                    if (newParam != null) {
                         tempToy = toyService.newToy(newParam);
                         view.set("Добавлена игрушка: " + tempToy);
                     }
                     break;
                 case "3":
-                    if (toyService.getActualToys().size() == 0){
+                    if (toyService.getActualToys().size() == 0) {
                         view.set("В стоке нет игрушек.");
                         break;
                     }
@@ -55,7 +55,7 @@ public class Controller {
                     view.set("В список призов добавлено: " + tempToy);
                     break;
                 case "4":
-                    if (giftQueue.getCurrentQueue().isEmpty()){
+                    if (giftQueue.getCurrentQueue().isEmpty()) {
                         view.set("Очередь подарков пуста.");
                         break;
                     }
@@ -75,7 +75,7 @@ public class Controller {
         }
     }
 
-    public void printAllList(List<Toy> toys){
+    public void printAllList(List<Toy> toys) {
         List<String> toPrint = new ArrayList<>();
         for (Toy toy :
                 toys) {
@@ -86,10 +86,10 @@ public class Controller {
     }
 
 
-    public String[] newToy(){
+    public String[] newToy() {
         view.set("Введите наименование новой игрушки: ");
         String name = view.get();
-        if (name == null || name.trim().isEmpty()){
+        if (name == null || name.trim().isEmpty()) {
             view.set("Наименование не может быть пустым, отмена создания.");
             return null;
         }
@@ -99,11 +99,11 @@ public class Controller {
         int quantityInt = 0;
         try {
             quantityInt = Integer.parseInt(quantity);
-        }catch (Exception e){
+        } catch (Exception e) {
             view.set("Должно быть введено только целое число!");
             return null;
         }
-        if (quantityInt <= 0){
+        if (quantityInt <= 0) {
             view.set("Количество может быть только больше 0!");
             return null;
         }
@@ -113,11 +113,11 @@ public class Controller {
         float chanceFloat = 0.0f;
         try {
             chanceFloat = Float.parseFloat(chance);
-        } catch (Exception e){
+        } catch (Exception e) {
             view.set("Неверный формат числа!");
             return null;
         }
-        if ((int)chanceFloat > 0 || chanceFloat == 0){
+        if ((int) chanceFloat > 0 || chanceFloat == 0) {
             view.set("Шанс выпадения должен быть меньше 1 и больше 0!");
             return null;
         }

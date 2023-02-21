@@ -7,6 +7,7 @@ public class ConsoleViewImpl implements View {
 
     Scanner sc = new Scanner(System.in);
     Logger logger = Logger.getAnonymousLogger();
+
     @Override
     public void set(String string) {
         logger.info(string);
